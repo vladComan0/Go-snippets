@@ -9,6 +9,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/go-playground/form/v4"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/vladComan0/letsgo/internal/models"
 )
@@ -18,6 +19,7 @@ type application struct {
 	infoLog       *log.Logger
 	snippets      *models.SnippetModel
 	templateCache map[string]*template.Template
+	formDecoder   *form.Decoder
 }
 
 func main() {
@@ -42,12 +44,16 @@ func main() {
 		errorLog.Fatal(err)
 	}
 
+	// initialize a new form decoder from go playground
+	formDecoder := form.NewDecoder()
+
 	// app struct (dependency injection)
 	app := &application{
 		errorLog:      errorLog,
 		infoLog:       infoLog,
 		snippets:      &models.SnippetModel{DB: db},
 		templateCache: templateCache,
+		formDecoder:   formDecoder,
 	}
 
 	srv := &http.Server{
