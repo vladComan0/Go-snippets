@@ -20,7 +20,7 @@ func (app *application) routes() http.Handler {
 	// CRUD + Authentication routes
 
 	// Create a new middleware chain containing the middleware specific to our dynamic application routes.
-	dynamicChain := alice.New(app.sessionManager.LoadAndSave)
+	dynamicChain := alice.New(app.sessionManager.LoadAndSave, noSurf)
 
 	// Unprotected (with respect to authotization) application routes that use the "dynamic" middleware chain.
 	router.Handler(http.MethodGet, "/", dynamicChain.ThenFunc(app.home))
