@@ -5,17 +5,21 @@ import (
 
 	"github.com/julienschmidt/httprouter"
 	"github.com/justinas/alice"
+	"github.com/vladComan0/letsgo/ui"
 )
 
 func (app *application) routes() http.Handler {
 	router := httprouter.New()
-	fileServer := http.FileServer(http.Dir("./ui/static/"))
+
+	// Convert the ui.Files embedded filesystem into an http.FileServer to satisfy the http.FileSystem interface
+	fileServer := http.FileServer(http.FS(ui.Files))
+
 	router.NotFound = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		app.clientError(w, http.StatusNotFound)
 	})
 
 	// CSS server route
-	router.Handler(http.MethodGet, "/static/*filepath", http.StripPrefix("/static", fileServer))
+	router.Handler(http.MethodGet, "/static/*filepath", fileServer)
 
 	// CRUD + Authentication routes
 
