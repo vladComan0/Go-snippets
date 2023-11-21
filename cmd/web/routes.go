@@ -21,6 +21,7 @@ func (app *application) routes() http.Handler {
 	// CSS server route
 	router.Handler(http.MethodGet, "/static/*filepath", fileServer)
 
+	router.HandlerFunc(http.MethodGet, "/ping", ping)
 	// CRUD + Authentication routes
 
 	// Create a new middleware chain containing the middleware specific to our dynamic application routes.
