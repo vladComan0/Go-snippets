@@ -42,17 +42,17 @@ jobs:
         run: go vet ./...
 
       - name: Install staticcheck
-        run: go get honnef.co/go/tools/cmd/staticcheck
-      
+        run: go install honnef.co/go/tools/cmd/staticcheck@latest
+
       - name: Run staticcheck
         run: staticcheck ./...
 
       - name: Install golint
-        run: go get -u golang.org/x/lint/golint@latest
-      
+        run: go install golang.org/x/lint/golint@latest
+
       - name: Run golint
         run: golint ./...
-
+    
       - name: Test
         run: go test -race -vet=off ./...
       
