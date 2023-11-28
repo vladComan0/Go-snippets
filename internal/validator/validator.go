@@ -11,7 +11,7 @@ type Validator struct {
 	FieldErrors    map[string]string
 }
 
-// Use the regexp.MustCompile() function to parse a regular expression pattern
+// EmailRX - Use the regexp.MustCompile() function to parse a regular expression pattern
 // for sanity checking the format of an email address. This returns a pointer to
 // a 'compiled' regexp.Regexp type, or panics in the event of an error. Parsing
 // this pattern once at startup and storing the compiled *regexp.Regexp in a
@@ -22,12 +22,12 @@ func (v *Validator) Valid() bool {
 	return len(v.FieldErrors) == 0 && len(v.NonFieldErrors) == 0
 }
 
-// AddNonFieldError() adds an error message to the NonFieldErrors slice.
+// AddNonFieldError adds an error message to the NonFieldErrors slice.
 func (v *Validator) AddNonFieldError(message string) {
 	v.NonFieldErrors = append(v.NonFieldErrors, message)
 }
 
-// AddFieldError() adds an error message to the FieldErrors map (so long as no
+// AddFieldError adds an error message to the FieldErrors map (so long as no
 // entry already exists for the given key).
 func (v *Validator) AddFieldError(key, message string) {
 	if v.FieldErrors == nil {
@@ -39,7 +39,7 @@ func (v *Validator) AddFieldError(key, message string) {
 	}
 }
 
-// CheckField() adds an error message to the FieldErrors map only if a
+// CheckField adds an error message to the FieldErrors map only if a
 // validation check is not 'ok'.
 func (v *Validator) CheckField(ok bool, key, message string) {
 	if !ok {
@@ -47,17 +47,17 @@ func (v *Validator) CheckField(ok bool, key, message string) {
 	}
 }
 
-// NotBlank() returns true if a value is not an empty string.
+// NotBlank returns true if a value is not an empty string.
 func NotBlank(value string) bool {
 	return strings.TrimSpace(value) != ""
 }
 
-// MaxChars() returns true if a value contains no more than n characters.
+// MaxChars returns true if a value contains no more than n characters.
 func MaxChars(value string, n int) bool {
 	return utf8.RuneCountInString(value) <= n
 }
 
-// PermittedInt() returns true if a value is in a list of permitted integers.
+// PermittedValue returns true if a value is in a list of permitted integers.
 func PermittedValue[T comparable](value T, permittedValues ...T) bool {
 	for _, permittedValue := range permittedValues {
 		if value == permittedValue {
@@ -71,7 +71,7 @@ func MinChars(value string, n int) bool {
 	return utf8.RuneCountInString(value) >= n
 }
 
-// Matches() returns true if a value matches a provided compiled regular
+// Matches returns true if a value matches a provided compiled regular
 // expression pattern.
 func Matches(value string, rx *regexp.Regexp) bool {
 	return rx.MatchString(value)
