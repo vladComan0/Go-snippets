@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/vladComan0/letsgo/internal/assert"
+	"github.com/vladComan0/go-snippets/internal/assert"
 )
 
 func TestHumanDate(t *testing.T) {

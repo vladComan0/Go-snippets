@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/vladComan0/letsgo/internal/models"
-	"github.com/vladComan0/letsgo/ui"
+	"github.com/vladComan0/go-snippets/internal/models"
+	"github.com/vladComan0/go-snippets/ui"
 )
 
 func humanDate(t time.Time) string {

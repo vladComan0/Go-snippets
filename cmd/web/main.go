@@ -15,7 +15,7 @@ import (
 	"github.com/alexedwards/scs/v2"
 	"github.com/go-playground/form/v4"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/vladComan0/letsgo/internal/models"
+	"github.com/vladComan0/go-snippets/internal/models"
 )
 
 type application struct {

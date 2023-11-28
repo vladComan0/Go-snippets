@@ -1,4 +1,4 @@
-module github.com/vladComan0/letsgo
+module github.com/vladComan0/go-snippets
 
 go 1.21.2
 

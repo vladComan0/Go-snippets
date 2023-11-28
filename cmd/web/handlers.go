@@ -7,8 +7,8 @@ import (
 	"strconv"
 
 	"github.com/julienschmidt/httprouter"
-	"github.com/vladComan0/letsgo/internal/models"
-	"github.com/vladComan0/letsgo/internal/validator"
+	"github.com/vladComan0/go-snippets/internal/models"
+	"github.com/vladComan0/go-snippets/internal/validator"
 )
 
 type snippetCreateForm struct {
