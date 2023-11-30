@@ -194,7 +194,7 @@ func TestUserSignup(t *testing.T) {
 
 			assert.Equal(t, code, subtest.wantCode)
 
-			if body != "" {
+			if subtest.wantFormTag != "" {
 				assert.StringContains(t, body, subtest.wantFormTag)
 			}
 		})
