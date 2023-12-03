@@ -3,8 +3,9 @@
     <div>
         <a href='/'>Home</a>
         {{if .IsAuthenticated}}
-            <a href='/snippet/create'>Create snippet</a>
+        <a href='/snippet/create'>Create snippet</a>
         {{end}}
+        <a href='/about'>About</a>
     </div>
     <div>
         {{if .IsAuthenticated}}

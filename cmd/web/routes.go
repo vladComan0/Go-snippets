@@ -30,6 +30,7 @@ func (app *application) routes() http.Handler {
 	// Unprotected (with respect to authotization) application routes that use the "dynamic" middleware chain.
 	router.Handler(http.MethodGet, "/", dynamicChain.ThenFunc(app.home))
 	router.Handler(http.MethodGet, "/snippet/view/:id", dynamicChain.ThenFunc(app.snippetView))
+	router.Handler(http.MethodGet, "/about", dynamicChain.ThenFunc(app.about))
 
 	router.Handler(http.MethodGet, "/user/signup", dynamicChain.ThenFunc(app.userSignup))
 	router.Handler(http.MethodPost, "/user/signup", dynamicChain.ThenFunc(app.userSignupPost))
