@@ -26,11 +26,13 @@ type application struct {
 	templateCache  map[string]*template.Template
 	formDecoder    *form.Decoder
 	sessionManager *scs.SessionManager
+	debugEnabled   bool
 }
 
 func main() {
 	addr := flag.String("addr", ":4000", "HTTP endpoint the server should listen on.")
-	dsn := flag.String("dsn", "snippet_user:pass1234@/snippetbox?parseTime=true", "MySQL DataSource Name")
+	dsn := flag.String("dsn", "snippet_user:pass1234@/snippetbox?parseTime=true", "MySQL DataSource Name.")
+	debug := flag.Bool("debug", false, "Enables debug mode for the snippet application.")
 	flag.Parse()
 
 	// loggers
@@ -68,6 +70,7 @@ func main() {
 		templateCache:  templateCache,
 		formDecoder:    formDecoder,
 		sessionManager: sessionManager,
+		debugEnabled:   *debug,
 	}
 
 	tlsConfig := &tls.Config{
