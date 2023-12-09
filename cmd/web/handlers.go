@@ -202,6 +202,15 @@ func (app *application) userLoginPost(w http.ResponseWriter, r *http.Request) {
 	// 'logged in'.
 	app.sessionManager.Put(r.Context(), "authenticatedUserID", id)
 
+	// Check for the existence of the redirectPathAfterLogin value in the session.
+	// If the value exists, use it to redirect the user to that URL. Then delete
+	// the value from the session.
+	redirectPathAfterLogin := app.sessionManager.PopString(r.Context(), "redirectPathAfterLogin")
+	if redirectPathAfterLogin != "" {
+		http.Redirect(w, r, redirectPathAfterLogin, http.StatusSeeOther)
+		return
+	}
+
 	http.Redirect(w, r, "/snippet/create", http.StatusSeeOther)
 }
 
