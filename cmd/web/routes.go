@@ -44,6 +44,7 @@ func (app *application) routes() http.Handler {
 	// Protected (with respect to authorization) application routes that use the protected middleware chain.
 	router.Handler(http.MethodGet, "/snippet/create", protectedChain.ThenFunc(app.snippetCreate))
 	router.Handler(http.MethodPost, "/snippet/create", protectedChain.ThenFunc(app.snippetCreatePost))
+	router.Handler(http.MethodGet, "/account/view", protectedChain.ThenFunc(app.accountView))
 
 	router.Handler(http.MethodPost, "/user/logout", protectedChain.ThenFunc(app.userLogoutPost))
 
