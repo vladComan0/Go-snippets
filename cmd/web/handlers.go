@@ -284,6 +284,7 @@ func (app *application) accountPasswordUpdatePost(w http.ResponseWriter, r *http
 	form.CheckField(validator.NotBlank(form.NewPassword), "newPassword", "This field cannot be blank.")
 	form.CheckField(validator.MinChars(form.NewPassword, PASSWORD_LENGTH), "newPassword", "This field must be at least 8 characters long.")
 
+	form.CheckField(validator.NotBlank(form.NewPasswordConfirmation), "newPasswordConfirmation", "This field cannot be blank.")
 	form.CheckField(validator.Compare(form.NewPassword, form.NewPasswordConfirmation), "newPasswordConfirmation", "Passwords do not match.")
 
 	if !form.Valid() {
@@ -298,6 +299,11 @@ func (app *application) accountPasswordUpdatePost(w http.ResponseWriter, r *http
 		switch {
 		case errors.Is(err, models.ErrInvalidCredentials):
 			form.AddFieldError("currentPassword", "Current password is incorrect.")
+			data := app.newTemplateData(r)
+			data.Form = form
+			app.render(w, http.StatusUnprocessableEntity, "password.tmpl.html", data)
+		case errors.Is(err, models.ErrSamePassword):
+			form.AddFieldError("newPassword", "New password cannot be the same as the current password.")
 			data := app.newTemplateData(r)
 			data.Form = form
 			app.render(w, http.StatusUnprocessableEntity, "password.tmpl.html", data)

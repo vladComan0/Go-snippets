@@ -123,6 +123,10 @@ func (m *UserModel) UpdatePassword(id int, currentPassword, newPassword string) 
 		}
 	}
 
+	if err := bcrypt.CompareHashAndPassword(hashedCurrentPassword, []byte(newPassword)); err == nil {
+		return ErrSamePassword
+	}
+
 	hashedNewPassword, err := bcrypt.GenerateFromPassword([]byte(newPassword), COST)
 	if err != nil {
 		return err
