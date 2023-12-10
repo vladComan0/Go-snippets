@@ -76,3 +76,7 @@ func MinChars(value string, n int) bool {
 func Matches(value string, rx *regexp.Regexp) bool {
 	return rx.MatchString(value)
 }
+
+func Compare[T comparable](actual, target T) bool {
+	return actual == target
+}

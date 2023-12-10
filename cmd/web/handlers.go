@@ -31,6 +31,13 @@ type userLoginForm struct {
 	validator.Validator `form:"-"`
 }
 
+type accountPasswordUpdateForm struct {
+	CurrentPassword         string `form:"currentPassword"`
+	NewPassword             string `form:"newPassword"`
+	NewPasswordConfirmation string `form:"newPasswordConfirmation"`
+	validator.Validator     `form:"-"`
+}
+
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
 	snippets, err := app.snippets.Latest()
 	if err != nil {
@@ -144,7 +151,7 @@ func (app *application) userSignupPost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Otherwise add a confirmation flash message to the session and redirect to the login page
-	app.sessionManager.Put(r.Context(), "flash", "Your signed up successfully. You can login now.")
+	app.sessionManager.Put(r.Context(), "flash", "You have signed up successfully. You can login now.")
 	http.Redirect(w, r, "/user/login", http.StatusSeeOther)
 }
 
@@ -253,4 +260,54 @@ func (app *application) accountView(w http.ResponseWriter, r *http.Request) {
 	data.User = user
 
 	app.render(w, http.StatusOK, "account.tmpl.html", data)
+}
+
+func (app *application) accountPasswordUpdate(w http.ResponseWriter, r *http.Request) {
+	data := app.newTemplateData(r)
+	data.Form = accountPasswordUpdateForm{}
+
+	app.render(w, http.StatusOK, "password.tmpl.html", data)
+}
+
+func (app *application) accountPasswordUpdatePost(w http.ResponseWriter, r *http.Request) {
+	var form accountPasswordUpdateForm
+
+	if err := app.decodePostForm(r, &form); err != nil {
+		app.clientError(w, http.StatusBadRequest)
+		return
+	}
+
+	const PASSWORD_LENGTH = 8
+
+	form.CheckField(validator.NotBlank(form.CurrentPassword), "currentPassword", "This field cannot be blank.")
+
+	form.CheckField(validator.NotBlank(form.NewPassword), "newPassword", "This field cannot be blank.")
+	form.CheckField(validator.MinChars(form.NewPassword, PASSWORD_LENGTH), "newPassword", "This field must be at least 8 characters long.")
+
+	form.CheckField(validator.Compare(form.NewPassword, form.NewPasswordConfirmation), "newPasswordConfirmation", "Passwords do not match.")
+
+	if !form.Valid() {
+		data := app.newTemplateData(r)
+		data.Form = form
+		app.render(w, http.StatusUnprocessableEntity, "password.tmpl.html", data)
+		return
+	}
+
+	userID := app.sessionManager.GetInt(r.Context(), "authenticatedUserID")
+	if err := app.users.UpdatePassword(userID, form.CurrentPassword, form.NewPassword); err != nil {
+		switch {
+		case errors.Is(err, models.ErrInvalidCredentials):
+			form.AddFieldError("currentPassword", "Current password is incorrect.")
+			data := app.newTemplateData(r)
+			data.Form = form
+			app.render(w, http.StatusUnprocessableEntity, "password.tmpl.html", data)
+		default:
+			app.serverError(w, err)
+		}
+		return
+	}
+
+	// Add a confirmation flash message to the session and redirect to the login page
+	app.sessionManager.Put(r.Context(), "flash", "Your password has been updated successfully!")
+	http.Redirect(w, r, "/account/view", http.StatusSeeOther)
 }
