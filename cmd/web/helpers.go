@@ -22,7 +22,7 @@ func (app *application) serverError(w http.ResponseWriter, err error) {
 }
 
 func (app *application) clientError(w http.ResponseWriter, status int) {
-	http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+	http.Error(w, http.StatusText(status), status)
 }
 
 func (app *application) render(w http.ResponseWriter, status int, page string, data *templateData) {
