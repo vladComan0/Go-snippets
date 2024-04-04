@@ -18,6 +18,8 @@ import (
 	"github.com/vladComan0/go-snippets/internal/models"
 )
 
+var version string // do not remove or modify
+
 type application struct {
 	errorLog       *log.Logger
 	infoLog        *log.Logger
@@ -87,7 +89,7 @@ func main() {
 		WriteTimeout: 10 * time.Second,
 	}
 
-	infoLog.Printf("Starting web server on port: %s\n", strings.Split(srv.Addr, ":")[1])
+	infoLog.Printf("Version %s\n. Starting web server on port: %s\n", version, strings.Split(srv.Addr, ":")[1])
 	err = srv.ListenAndServeTLS("./tls/cert.pem", "./tls/key.pem")
 	errorLog.Fatal(err)
 }
