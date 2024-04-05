@@ -19,10 +19,11 @@ committed:
 	@git diff --exit-code > /dev/null || (echo "** COMMIT YOUR CHANGES FIRST **"; exit 1)
 
 docker: $(SOURCES) build/Dockerfile
-	docker build -t snippets:latest . -f build/Dockerfile --build-arg VERSION=$(VERSION)
+	echo "VERSION=$(VERSION)" > .env
+	docker-compose -f build/docker-compose.yml build --build-arg VERSION=$(VERSION)
 
 .PHONY: publish
-publish: committed #lint
+publish: #committed lint
 	make docker
-	docker tag  sort-anim:latest vladcoman/snippets:$(VERSION)
+	docker tag  snippets:latest vladcoman/snippets:$(VERSION)
 	docker push vladcoman/snippets:$(VERSION)

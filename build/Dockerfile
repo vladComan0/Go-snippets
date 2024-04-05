@@ -7,13 +7,13 @@ RUN /sbin/apk update && \
 RUN adduser -D -g '' web
 WORKDIR /home/web
 
-COPY go.mod .
-COPY go.sum .
-COPY cmd    ./cmd
-COPY internal ./internal
-COPY tls   ./tls
-COPY ui ./ui
-COPY *.go   .
+COPY go.mod     ./
+COPY go.sum     ./
+COPY cmd        ./cmd/
+COPY internal   ./internal/
+COPY tls        ./tls/
+COPY ui         ./ui/
+COPY *.go       ./
 
 ARG VERSION
 
@@ -33,4 +33,4 @@ WORKDIR /home
 EXPOSE 8080
 
 ENTRYPOINT ["./web"]
-CMD ["-addr=:8080", "-dsn=snippet_user:pass1234@/snippetbox?parseTime=true", "-debug=false"]
+CMD ["-addr=:8080", "-dsn=snippet_user:pass1234@db:3306/snippetbox?parseTime=true", "-debug=false"]

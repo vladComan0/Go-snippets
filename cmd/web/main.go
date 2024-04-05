@@ -33,7 +33,7 @@ type application struct {
 
 func main() {
 	addr := flag.String("addr", ":4000", "HTTP endpoint the server should listen on.")
-	dsn := flag.String("dsn", "snippet_user:pass1234@/snippetbox?parseTime=true", "MySQL DataSource Name.")
+	dsn := flag.String("dsn", "snippet_user:pass1234@db:3306/snippetbox?parseTime=true", "MySQL DataSource Name.")
 	debug := flag.Bool("debug", false, "Enables debug mode for the snippet application.")
 	flag.Parse()
 
