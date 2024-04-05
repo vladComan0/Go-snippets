@@ -33,4 +33,4 @@ WORKDIR /home
 EXPOSE 8080
 
 ENTRYPOINT ["./web"]
-CMD ["-addr=:8080", "-dsn=snippet_user:pass1234@db:3306/snippetbox?parseTime=true", "-debug=false"]
+CMD ["-addr=:8080", "-dsn=snippet_user:pass1234@db:3307/snippetbox?parseTime=true", "-debug=false"]

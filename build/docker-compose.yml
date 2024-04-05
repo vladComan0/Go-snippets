@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 services:
   web:
     build: 
@@ -10,7 +10,8 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
   db:
     image: mysql:8.0
     env_file:
@@ -20,8 +21,16 @@ services:
       MYSQL_DATABASE: snippetbox
       MYSQL_USER: snippet_user
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_TCP_PORT: 3307
+      MYSQL_ROOT_HOST: '%'
     volumes:
-      - mysql_data:/var/lib/mysql
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-volumes:
-  mysql_data:
+      - ${PWD}/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "3307:3307"
+    expose:
+      - 3307
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
