@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 services:
   web:
     build: 
@@ -9,8 +9,11 @@ services:
     image: vladcoman/snippets:${VERSION}
     ports:
       - "8080:8080"
+    networks:
+      - backend
     depends_on:
-      - db
+      db:
+        condition: service_healthy
   db:
     image: mysql:8.0
     env_file:
@@ -20,8 +23,20 @@ services:
       MYSQL_DATABASE: snippetbox
       MYSQL_USER: snippet_user
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_TCP_PORT: 3306
+      MYSQL_ROOT_HOST: '%'
     volumes:
-      - mysql_data:/var/lib/mysql
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-volumes:
-  mysql_data:
+      - ${PWD}/build/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "3306:3306"
+    expose:
+      - 3306
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+networks:
+  backend:

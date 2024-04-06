@@ -14,6 +14,7 @@ COPY internal   ./internal/
 COPY tls        ./tls/
 COPY ui         ./ui/
 COPY *.go       ./
+RUN chmod 644  ./tls/key.pem
 
 ARG VERSION
 
@@ -27,6 +28,7 @@ COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=builder /usr/share/zoneinfo /usr/share/zoneinfo
 COPY --from=builder /etc/passwd /etc/passwd
 COPY --from=builder /home/web/web /home/web
+COPY --from=builder /home/web/tls /home/tls/
 
 USER web
 WORKDIR /home

@@ -22,8 +22,16 @@ docker: $(SOURCES) build/Dockerfile
 	echo "VERSION=$(VERSION)" > .env
 	docker-compose -f build/docker-compose.yml build --build-arg VERSION=$(VERSION)
 
+.PHONY: run
+run:
+	docker-compose -f build/docker-compose.yml up -d
+
+.PHONY: run
+destroy:
+	docker-compose -f build/docker-compose.yml down
+
 .PHONY: publish
-publish: #committed lint
+publish: committed #lint
 	make docker
 	docker tag  snippets:latest vladcoman/snippets:$(VERSION)
 	docker push vladcoman/snippets:$(VERSION)
