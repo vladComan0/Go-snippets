@@ -26,7 +26,7 @@ services:
       MYSQL_TCP_PORT: 3306
       MYSQL_ROOT_HOST: '%'
     volumes:
-      - ${PWD}/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ${PWD}/build/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "3306:3306"
     expose:

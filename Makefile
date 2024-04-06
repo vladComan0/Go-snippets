@@ -24,7 +24,11 @@ docker: $(SOURCES) build/Dockerfile
 
 .PHONY: run
 run:
-	docker-compose -f build/docker-compose.yml up
+	docker-compose -f build/docker-compose.yml up -d
+
+.PHONY: run
+destroy:
+	docker-compose -f build/docker-compose.yml down
 
 .PHONY: publish
 publish: committed #lint

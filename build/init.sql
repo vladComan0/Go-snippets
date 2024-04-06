@@ -1,7 +1,6 @@
 CREATE SCHEMA IF NOT EXISTS `snippetbox`;
 USE `snippetbox`;
 
--- CREATE USER 'snippet_user'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';
 GRANT SELECT, INSERT, UPDATE, DELETE ON `snippetbox`.* TO `snippet_user`@`%`;
 
 CREATE TABLE `sessions` (
