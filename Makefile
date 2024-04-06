@@ -19,7 +19,11 @@ committed:
 	@git diff --exit-code > /dev/null || (echo "** COMMIT YOUR CHANGES FIRST **"; exit 1)
 
 docker: $(SOURCES) build/Dockerfile
-	echo "VERSION=$(VERSION)" > .env
+	if grep -q 'VERSION=' ./build/.env; then \
+        sed -i '' 's/^VERSION=.*/VERSION=$(VERSION)/' ./build/.env; \
+    else \
+        echo "VERSION=$(VERSION)" >> ./build/.env; \
+    fi
 	docker-compose -f build/docker-compose.yml build --build-arg VERSION=$(VERSION)
 
 .PHONY: run
