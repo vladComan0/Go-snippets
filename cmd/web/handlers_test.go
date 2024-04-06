@@ -54,17 +54,17 @@ func TestSnippetView(t *testing.T) {
 		{
 			name:     "Negative ID",
 			urlPath:  "/snippet/view/-1",
-			wantCode: http.StatusNotFound,
+			wantCode: http.StatusBadRequest,
 		},
 		{
 			name:     "Decimal ID",
 			urlPath:  "/snippet/view/1.34",
-			wantCode: http.StatusNotFound,
+			wantCode: http.StatusBadRequest,
 		},
 		{
 			name:     "String ID",
 			urlPath:  "/snippet/view/foo",
-			wantCode: http.StatusNotFound,
+			wantCode: http.StatusBadRequest,
 		},
 		{
 			name:     "Empty ID",
