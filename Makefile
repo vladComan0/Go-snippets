@@ -23,7 +23,7 @@ docker: $(SOURCES) build/Dockerfile
 	docker-compose -f build/docker-compose.yml build --build-arg VERSION=$(VERSION)
 
 .PHONY: publish
-publish: #committed lint
+publish: committed #lint
 	make docker
 	docker tag  snippets:latest vladcoman/snippets:$(VERSION)
 	docker push vladcoman/snippets:$(VERSION)
