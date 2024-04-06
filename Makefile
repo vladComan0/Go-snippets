@@ -28,7 +28,7 @@ docker: $(SOURCES) build/Dockerfile
 
 .PHONY: run
 run:
-	docker-compose -f build/docker-compose.yml up -d --build
+	docker-compose -f build/docker-compose.yml up -d
 
 .PHONY: run
 destroy:
