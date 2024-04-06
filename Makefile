@@ -22,6 +22,10 @@ docker: $(SOURCES) build/Dockerfile
 	echo "VERSION=$(VERSION)" > .env
 	docker-compose -f build/docker-compose.yml build --build-arg VERSION=$(VERSION)
 
+.PHONY: run
+run:
+    docker-compose -f build/docker-compose.yml up
+
 .PHONY: publish
 publish: committed #lint
 	make docker
