@@ -21,6 +21,7 @@ func TestSecureHeaders(t *testing.T) {
 	// Create a mock HTTP handler that we can pass to our secureHeaders middleware
 	// which writes a 200 status code and an "OK" response body.
 	mockHandler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		//nolint
 		w.Write([]byte("OK"))
 	})
 

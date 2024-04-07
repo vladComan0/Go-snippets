@@ -14,7 +14,11 @@ import (
 
 func (app *application) serverError(w http.ResponseWriter, err error) {
 	trace := fmt.Sprintf("%s\n%s", err.Error(), debug.Stack())
-	app.errorLog.Output(2, trace)
+
+	if err := app.errorLog.Output(2, trace); err != nil {
+		app.errorLog.Printf("unable to write to error log: %v", err)
+	}
+
 	if app.debugEnabled {
 		http.Error(w, trace, http.StatusInternalServerError)
 	}
@@ -42,7 +46,9 @@ func (app *application) render(w http.ResponseWriter, status int, page string, d
 	// If the template is written to the buffer without any errors, we are safe
 	// to go ahead and write the HTTP status code to http.ResponseWriter.
 	w.WriteHeader(status)
-	buf.WriteTo(w)
+	if _, err := buf.WriteTo(w); err != nil {
+		app.serverError(w, err)
+	}
 }
 
 func (app *application) newTemplateData(r *http.Request) *templateData {
